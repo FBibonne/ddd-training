@@ -1,6 +1,8 @@
 package org.example.basket;
 
-public interface Quantity {
+import java.io.Serializable;
+
+public interface Quantity extends Serializable {
 
     Quantity ZERO = new Zero();
     Quantity ONE = of(1);
@@ -38,7 +40,7 @@ public interface Quantity {
 
     }
 
-    final class Zero implements Quantity {
+    record Zero() implements Quantity {
 
         @Override
         public int value() {

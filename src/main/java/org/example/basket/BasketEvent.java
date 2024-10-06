@@ -1,6 +1,8 @@
 package org.example.basket;
 
-public sealed interface BasketEvent permits ItemAdded, QuantityChanged {
+import java.io.Serializable;
+
+public sealed interface BasketEvent extends Serializable permits ItemAdded, QuantityChanged {
 
     BasketId basketId();
 

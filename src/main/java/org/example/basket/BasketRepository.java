@@ -2,7 +2,16 @@ package org.example.basket;
 
 public interface BasketRepository {
 
-    Basket findById(BasketId basketId);
+    default Basket findById(BasketId basketId){
+        EventStream.History history = findHistoryForBasketId(basketId);
+        return Basket.replay(basketId, history);
+    }
 
-    void save(Basket basket);
+    EventStream.History findHistoryForBasketId(BasketId basketId);
+
+    default void save(Basket basket) {
+        save(basket.getId(), basket.getPendingEvents());
+    }
+
+    void save(BasketId basketId, EventStream.Pending pendingEvents);
 }

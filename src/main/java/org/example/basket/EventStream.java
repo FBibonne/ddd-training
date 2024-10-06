@@ -21,6 +21,10 @@ public abstract class EventStream {
         events.forEach(consumer);
     }
 
+    public BasketEvent[] toArray() {
+        return events.toArray(BasketEvent[]::new);
+    }
+
     public static final class History extends EventStream {
 
         private History(List<BasketEvent> events) {

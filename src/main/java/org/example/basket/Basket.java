@@ -1,5 +1,10 @@
 package org.example.basket;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,17 +14,21 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@EqualsAndHashCode(of={"id", "itemsPerId"})
+@ToString(of={"id", "itemsPerId"})
 public class Basket {
 
+    @Getter
     private final BasketId id;
     private final Map<ItemId, Item> itemsPerId = new HashMap<>();
+    @Getter(AccessLevel.PACKAGE)
     private final EventStream.Pending pendingEvents = EventStream.Pending.empty();
 
     private Basket(BasketId id) {
         this.id = id;
     }
 
-    public Basket(BasketId id, Collection<Item> items) {
+    private Basket(BasketId id, Collection<Item> items) {
         Map<ItemId, Item> itemsPerId = items.stream()
                 .collect(Collectors.toMap(Item::id, Function.identity()));
 
@@ -40,7 +49,7 @@ public class Basket {
         }
     }
 
-    public static Basket replay(BasketId basketId, EventStream.History history) {
+    protected static Basket replay(BasketId basketId, EventStream.History history) {
         return new Basket(basketId, history);
     }
 
@@ -88,7 +97,7 @@ public class Basket {
         return decision;
     }
 
-    public Basket with(ItemId itemId, Quantity quantity) {
+    protected Basket with(ItemId itemId, Quantity quantity) {
         List<Item> items = new ArrayList<>(itemsPerId.values());
         items.add(new Item(itemId, quantity));
         return new Basket(id, items);

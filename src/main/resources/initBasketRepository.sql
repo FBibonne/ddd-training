@@ -1,0 +1,1 @@
+create table basket_events(basket_id bigint primary key , events_data bytea);
